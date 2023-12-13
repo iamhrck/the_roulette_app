@@ -3,10 +3,13 @@
 the roulette app
 
 ## Screen Flow
-![screen_flow](./doc/screen_flow.jpg)
+<img src="./doc/screen_flow.jpg" width="70%">
 
 ## Getting Started
 
 ```sh
 flutter pub get
 ```
+
+## Demo
+<img src="./doc/demo.gif" width="30%">
