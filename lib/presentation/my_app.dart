@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_roulette_app/shared/router/app_router.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      routes: AppRouter.routes,
       home: const MyHomePage(),
     );
   }
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +30,24 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Container(
         alignment: Alignment.center,
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('You have pushed the button this many times:')
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRouter.roulette);
+                },
+                child: const Text(
+                  'Start',
+                  style: TextStyle(fontSize: 20),
+                ))
           ],
         ),
       ),
