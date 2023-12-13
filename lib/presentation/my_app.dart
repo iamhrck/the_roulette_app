@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:the_roulette_app/presentation/components/app_bar.dart';
+import 'package:the_roulette_app/shared/constants/strings.dart';
 import 'package:the_roulette_app/shared/router/app_router.dart';
 
 class MyApp extends StatelessWidget {
@@ -24,10 +26,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Flutter Demo Home Page'),
-      ),
+      appBar: const CustomAppBar(title: Strings.appTitle),
       body: Container(
         alignment: Alignment.center,
         child: Column(

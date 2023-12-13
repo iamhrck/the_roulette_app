@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:the_roulette_app/presentation/components/app_bar.dart';
+import 'package:the_roulette_app/shared/constants/strings.dart';
 
 class RouletteScreen extends StatelessWidget {
   const RouletteScreen({super.key});
@@ -6,10 +8,7 @@ class RouletteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text('RouletteScreen'),
-        ),
+        appBar: const CustomAppBar(title: Strings.appTitle),
         body: Container(
             alignment: Alignment.center, child: const Text('RouletteScreen')));
   }
