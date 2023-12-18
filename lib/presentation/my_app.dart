@@ -1,15 +1,39 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:the_roulette_app/presentation/components/app_bar.dart';
 import 'package:the_roulette_app/shared/constants/strings.dart';
 import 'package:the_roulette_app/shared/router/app_router.dart';
+import 'package:device_preview/device_preview.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    if (kReleaseMode) {
+      return _buildMyApp();
+    } else {
+      return _buildDebugMyApp(context);
+    }
+  }
+
+  Widget _buildMyApp() {
     return MaterialApp(
       title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      routes: AppRouter.routes,
+      home: const MyHomePage(),
+    );
+  }
+
+  Widget _buildDebugMyApp(BuildContext context) {
+    return MaterialApp(
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      title: 'Flutter Debug Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
