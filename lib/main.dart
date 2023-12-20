@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:the_roulette_app/presentation/my_app.dart';
+import 'package:the_roulette_app/ui/my_app.dart';
 import 'package:device_preview/device_preview.dart';
 
 void main() {

@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:the_roulette_app/presentation/screen/roulette/roulette_screem.dart';
+import 'package:the_roulette_app/ui/screen/roulette/roulette_screem.dart';
 
 class AppRouter {
   AppRouter._();

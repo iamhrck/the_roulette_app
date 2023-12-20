@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_roulette_app/presentation/components/app_bar.dart';
+import 'package:the_roulette_app/ui/components/app_bar.dart';
 import 'package:the_roulette_app/shared/constants/strings.dart';
 
 class RouletteScreen extends StatelessWidget {
