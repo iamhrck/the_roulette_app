@@ -59,28 +59,39 @@ class _Roulette extends StatefulWidget {
 
 class _RouletteState extends State<_Roulette>
     with SingleTickerProviderStateMixin {
-  bool _isAnimating = false;
+  RouletteAnimation _isAnimating = RouletteAnimation.stop;
   late AnimationController _controller;
 
   void _switchAnimation() {
-    if (_isAnimating) {
-      // 0.18を加算してタップされた地点からアニメーション終了までほんのり動かす
-      // FIXME: ここの誰に当てるかを判定する処理は別ファイルに移したい
-      double endpoint = _controller.value + 0.18;
+    switch (_isAnimating) {
+      case RouletteAnimation.stop:
+        _isAnimating = RouletteAnimation.inprogress;
+        _controller.repeat();
+        break;
 
-      _controller
-          .animateTo(
-        endpoint,
-        duration: const Duration(seconds: 2),
-        curve: Curves.easeOut,
-      )
-          .whenComplete(() {
-        context.read<RouletteBloc>().add(JudgeWinnerEvent(endpoint: endpoint));
-      });
-    } else {
-      _controller.repeat();
+      case RouletteAnimation.inprogress:
+        _isAnimating = RouletteAnimation.waitting;
+        // 0.18を加算してタップされた地点からアニメーション終了までほんのり動かす
+        // FIXME: ここの誰に当てるかを判定する処理は別ファイルに移したい
+        double endpoint = _controller.value + 0.18;
+
+        _controller
+            .animateTo(
+          endpoint,
+          duration: const Duration(seconds: 2),
+          curve: Curves.easeOut,
+        )
+            .whenComplete(() {
+          context
+              .read<RouletteBloc>()
+              .add(JudgeWinnerEvent(endpoint: endpoint));
+          _isAnimating = RouletteAnimation.stop;
+        });
+        break;
+
+      case RouletteAnimation.waitting:
+        break;
     }
-    _isAnimating = !_isAnimating;
   }
 
   @override
@@ -106,7 +117,8 @@ class _RouletteState extends State<_Roulette>
     return BlocBuilder<RouletteBloc, RouletteState>(
       builder: (context, state) {
         return GestureDetector(
-          onTap: _switchAnimation,
+          onTap:
+              _isAnimating == RouletteAnimation.stop ? _switchAnimation : null,
           child: LimitedBox(
             maxHeight: size.width,
             maxWidth: size.width,
@@ -182,3 +194,5 @@ class _RouletteGuideArea extends StatelessWidget {
     }).toList();
   }
 }
+
+enum RouletteAnimation { stop, inprogress, waitting }
