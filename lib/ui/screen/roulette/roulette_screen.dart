@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_bloc.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_event.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_state.dart';
+import 'package:the_roulette_app/shared/constants/assets.dart';
 import 'package:the_roulette_app/ui/components/app_bar.dart';
 import 'package:the_roulette_app/shared/constants/app_text_style.dart';
 import 'package:the_roulette_app/shared/constants/strings.dart';
@@ -130,8 +131,7 @@ class _RouletteState extends State<_Roulette>
                     angle: -(_controller.value * 2 * 3.14),
                     child: _buildRoulette(state.pieDataList, size),
                   ),
-                  SvgPicture.asset('assets/roulette_arrow.svg',
-                      width: 30, height: 54)
+                  SvgPicture.asset(Assets.rouletteArrow, width: 30, height: 54)
                 ]);
               },
             ),
