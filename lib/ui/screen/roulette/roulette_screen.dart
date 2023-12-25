@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_bloc.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_event.dart';
@@ -22,12 +23,12 @@ class RouletteScreen extends StatelessWidget {
             create: (context) => RouletteBloc()..add(GetPieDataEvent()),
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: const SingleChildScrollView(
+              child: SingleChildScrollView(
                 child: Column(mainAxisSize: MainAxisSize.max, children: [
-                  _RouletteScreenLeadText(),
-                  SizedBox(height: 28),
+                  const _RouletteScreenLeadText(),
+                  const SizedBox(height: 28),
                   _Roulette(),
-                  _RouletteGuideArea(),
+                  const _RouletteGuideArea(),
                 ]),
               ),
             )));
@@ -51,84 +52,67 @@ class _RouletteScreenLeadText extends StatelessWidget {
   }
 }
 
-class _Roulette extends StatefulWidget {
-  const _Roulette();
-
-  @override
-  _RouletteState createState() => _RouletteState();
-}
-
-class _RouletteState extends State<_Roulette>
-    with SingleTickerProviderStateMixin {
-  RouletteAnimation _isAnimating = RouletteAnimation.stop;
-  late AnimationController _controller;
-
-  void _switchAnimation() {
-    switch (_isAnimating) {
-      case RouletteAnimation.stop:
-        _isAnimating = RouletteAnimation.inprogress;
-        _controller.repeat();
-        break;
-
-      case RouletteAnimation.inprogress:
-        _isAnimating = RouletteAnimation.waitting;
-        // 0.18を加算してタップされた地点からアニメーション終了までほんのり動かす
-        // FIXME: ここの誰に当てるかを判定する処理は別ファイルに移したい
-        double endpoint = _controller.value + 0.18;
-
-        _controller
-            .animateTo(
-          endpoint,
-          duration: const Duration(seconds: 2),
-          curve: Curves.easeOut,
-        )
-            .whenComplete(() {
-          context
-              .read<RouletteBloc>()
-              .add(JudgeWinnerEvent(endpoint: endpoint));
-          _isAnimating = RouletteAnimation.stop;
-        });
-        break;
-
-      case RouletteAnimation.waitting:
-        break;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      upperBound: 10,
-      duration: const Duration(seconds: 4),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+// ignore: must_be_immutable
+class _Roulette extends HookWidget {
+  RouletteAnimation isAnimating = RouletteAnimation.stop;
 
   @override
   Widget build(BuildContext context) {
+    final controller = useAnimationController(
+      upperBound: 10,
+      duration: const Duration(seconds: 4),
+    );
+
+    void switchAnimation() {
+      switch (isAnimating) {
+        case RouletteAnimation.stop:
+          isAnimating = RouletteAnimation.inprogress;
+          controller.repeat();
+          break;
+
+        case RouletteAnimation.inprogress:
+          isAnimating = RouletteAnimation.waitting;
+          // 0.18を加算してタップされた地点からアニメーション終了までほんのり動かす
+          // FIXME: ここの誰に当てるかを判定する処理は別ファイルに移したい
+          double endpoint = controller.value + 0.18;
+
+          controller
+              .animateTo(
+            endpoint,
+            duration: const Duration(seconds: 2),
+            curve: Curves.easeOut,
+          )
+              .whenComplete(() {
+            context
+                .read<RouletteBloc>()
+                .add(JudgeWinnerEvent(endpoint: endpoint));
+            isAnimating = RouletteAnimation.stop;
+          });
+          break;
+
+        case RouletteAnimation.waitting:
+          break;
+      }
+    }
+
     final Size size = MediaQuery.of(context).size;
 
     return BlocBuilder<RouletteBloc, RouletteState>(
+      buildWhen: (previous, current) {
+        return previous.pieDataList.length != current.pieDataList.length;
+      },
       builder: (context, state) {
         return GestureDetector(
-          onTap:
-              _isAnimating == RouletteAnimation.stop ? _switchAnimation : null,
+          onTap: switchAnimation,
           child: LimitedBox(
             maxHeight: size.width,
             maxWidth: size.width,
             child: AnimatedBuilder(
-              animation: _controller,
+              animation: controller,
               builder: (context, child) {
                 return Stack(alignment: Alignment.topCenter, children: [
                   Transform.rotate(
-                    angle: -(_controller.value * 2 * 3.14),
+                    angle: -(controller.value * 2 * 3.14),
                     child: _buildRoulette(state.pieDataList, size),
                   ),
                   SvgPicture.asset(Assets.rouletteArrow, width: 30, height: 54)
