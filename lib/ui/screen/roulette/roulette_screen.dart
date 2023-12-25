@@ -23,12 +23,12 @@ class RouletteScreen extends StatelessWidget {
             create: (context) => RouletteBloc()..add(GetPieDataEvent()),
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              child: SingleChildScrollView(
+              child: const SingleChildScrollView(
                 child: Column(mainAxisSize: MainAxisSize.max, children: [
-                  const _RouletteScreenLeadText(),
-                  const SizedBox(height: 28),
+                  _RouletteScreenLeadText(),
+                  SizedBox(height: 28),
                   _Roulette(),
-                  const _RouletteGuideArea(),
+                  _RouletteGuideArea(),
                 ]),
               ),
             )));
@@ -41,12 +41,15 @@ class _RouletteScreenLeadText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RouletteBloc, RouletteState>(builder: (context, state) {
-      if (state.result.isEmpty) {
+      if (state.animation == RouletteAnimation.stop && state.result.isEmpty) {
         return Text(Strings.rouletteLeadMessage, style: AppTextStyle.headline3);
-      } else {
+      } else if (state.animation == RouletteAnimation.stop &&
+          state.result.isNotEmpty) {
         return Text(state.result,
             style:
                 AppTextStyle.headline3.copyWith(color: state.getWinnerColor()));
+      } else {
+        return Text(Strings.space, style: AppTextStyle.headline3);
       }
     });
   }
@@ -54,7 +57,7 @@ class _RouletteScreenLeadText extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _Roulette extends HookWidget {
-  RouletteAnimation isAnimating = RouletteAnimation.stop;
+  const _Roulette();
 
   @override
   Widget build(BuildContext context) {
@@ -64,14 +67,17 @@ class _Roulette extends HookWidget {
     );
 
     void switchAnimation() {
-      switch (isAnimating) {
+      RouletteAnimation animation =
+          BlocProvider.of<RouletteBloc>(context).state.animation;
+
+      switch (animation) {
         case RouletteAnimation.stop:
-          isAnimating = RouletteAnimation.inprogress;
+          context.read<RouletteBloc>().add(SwitchAnimationEvent());
           controller.repeat();
           break;
 
         case RouletteAnimation.inprogress:
-          isAnimating = RouletteAnimation.waitting;
+          context.read<RouletteBloc>().add(SwitchAnimationEvent());
           // 0.18を加算してタップされた地点からアニメーション終了までほんのり動かす
           // FIXME: ここの誰に当てるかを判定する処理は別ファイルに移したい
           double endpoint = controller.value + 0.18;
@@ -86,7 +92,7 @@ class _Roulette extends HookWidget {
             context
                 .read<RouletteBloc>()
                 .add(JudgeWinnerEvent(endpoint: endpoint));
-            isAnimating = RouletteAnimation.stop;
+            context.read<RouletteBloc>().add(SwitchAnimationEvent());
           });
           break;
 

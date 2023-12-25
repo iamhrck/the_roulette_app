@@ -5,12 +5,14 @@ import 'package:the_roulette_app/bloc/roulette/roulette_event.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_state.dart';
 import 'package:the_roulette_app/shared/constants/app_colors.dart';
 import 'package:the_roulette_app/shared/constants/app_text_style.dart';
+import 'package:the_roulette_app/ui/screen/roulette/roulette_screen.dart';
 
 class RouletteBloc extends Bloc<RouletteEvent, RouletteState> {
   RouletteBloc() : super(const RouletteState()) {
     on<ResetRouletteEvent>(_resetRoulette);
     on<JudgeWinnerEvent>(_judgeWinner);
     on<GetPieDataEvent>(_getPieData);
+    on<SwitchAnimationEvent>(_switchAnimation);
   }
 
   void _resetRoulette(ResetRouletteEvent event, Emitter<RouletteState> emit) {
@@ -63,5 +65,23 @@ class RouletteBloc extends Bloc<RouletteEvent, RouletteState> {
           title: "Pink",
           titleStyle: AppTextStyle.headline4.copyWith(color: AppColors.white))
     ]));
+  }
+
+  void _switchAnimation(
+      SwitchAnimationEvent event, Emitter<RouletteState> emit) {
+    final state = this.state;
+
+    next() {
+      switch (state.animation) {
+        case RouletteAnimation.stop:
+          return RouletteAnimation.inprogress;
+        case RouletteAnimation.inprogress:
+          return RouletteAnimation.waitting;
+        case RouletteAnimation.waitting:
+          return RouletteAnimation.stop;
+      }
+    }
+
+    emit(state.copyWith(animation: next()));
   }
 }

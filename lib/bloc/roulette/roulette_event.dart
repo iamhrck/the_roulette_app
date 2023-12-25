@@ -12,3 +12,5 @@ class JudgeWinnerEvent extends RouletteEvent {
 class ResetRouletteEvent extends RouletteEvent {}
 
 class GetPieDataEvent extends RouletteEvent {}
+
+class SwitchAnimationEvent extends RouletteEvent {}
