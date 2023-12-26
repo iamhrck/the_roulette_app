@@ -41,10 +41,9 @@ class _RouletteScreenLeadText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RouletteBloc, RouletteState>(builder: (context, state) {
-      if (state.animation == RouletteAnimation.stop && state.result.isEmpty) {
+      if (state.result.isEmpty && state.animation == RouletteAnimation.stop) {
         return Text(Strings.rouletteLeadMessage, style: AppTextStyle.headline3);
-      } else if (state.animation == RouletteAnimation.stop &&
-          state.result.isNotEmpty) {
+      } else if (state.animation == RouletteAnimation.stop) {
         return Text(state.result,
             style:
                 AppTextStyle.headline3.copyWith(color: state.getWinnerColor()));
@@ -55,7 +54,6 @@ class _RouletteScreenLeadText extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class _Roulette extends HookWidget {
   const _Roulette();
 
@@ -104,9 +102,7 @@ class _Roulette extends HookWidget {
     final Size size = MediaQuery.of(context).size;
 
     return BlocBuilder<RouletteBloc, RouletteState>(
-      buildWhen: (previous, current) {
-        return previous.pieDataList.length != current.pieDataList.length;
-      },
+      buildWhen: (p, c) => p.pieDataList.length != c.pieDataList.length,
       builder: (context, state) {
         return GestureDetector(
           onTap: switchAnimation,
@@ -154,6 +150,7 @@ class _RouletteGuideArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RouletteBloc, RouletteState>(
+      buildWhen: (p, c) => p.pieDataList.length != c.pieDataList.length,
       builder: (context, state) {
         return Wrap(
             direction: Axis.horizontal, children: _buildRouletteGuide(state));

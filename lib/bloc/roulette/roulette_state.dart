@@ -14,7 +14,10 @@ class RouletteState extends Equatable {
       this.animation = RouletteAnimation.stop});
 
   Color getWinnerColor() {
-    return pieDataList.firstWhere((element) => element.title == result).color;
+    return pieDataList
+        .firstWhere((element) => element.title == result,
+            orElse: () => PieChartSectionData())
+        .color;
   }
 
   RouletteState copyWith(
