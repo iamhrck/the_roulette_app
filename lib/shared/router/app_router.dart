@@ -20,6 +20,11 @@ class AppRouter {
           builder: (BuildContext context) => RouletteScreen(sections: sections),
         );
 
+      case setup:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const EntryScreen(),
+        );
+
       default:
         return null;
     }

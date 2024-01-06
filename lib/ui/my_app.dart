@@ -65,7 +65,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRouter.roulette);
+                  Navigator.pushNamed(context, AppRouter.setup);
                 },
                 child: const Text(
                   'Start',
