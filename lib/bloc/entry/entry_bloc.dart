@@ -12,7 +12,9 @@ class EntryBloc extends Bloc<EntryEvent, EntryState> {
   void _addSection(AddSectionEvent event, Emitter<EntryState> emit) {
     final state = this.state;
 
-    final sections = [...state.sections, Section(id: state.sections.length)];
+    final int id = state.sections[state.sections.length - 1].id + 1;
+
+    final sections = [...state.sections, Section(id: id)];
     emit(state.copyWith(sections: sections));
   }
 
