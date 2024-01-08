@@ -7,20 +7,24 @@ class Section extends Equatable {
   final bool isTarget;
   String sectionName;
   String ratio;
+  int ratioSumFromThis;
 
-  Section(
-      {required this.id,
-      this.isSkip = false,
-      this.isTarget = false,
-      this.sectionName = '',
-      this.ratio = '1'});
+  Section({
+    required this.id,
+    this.isSkip = false,
+    this.isTarget = false,
+    this.sectionName = '',
+    this.ratio = '1',
+    this.ratioSumFromThis = 0,
+  });
 
-  Section copyWith(
-      {int? id,
-      bool? isSkip,
-      bool? isTarget,
-      String? sectionName,
-      String? ratio}) {
+  Section copyWith({
+    int? id,
+    bool? isSkip,
+    bool? isTarget,
+    String? sectionName,
+    String? ratio,
+  }) {
     return Section(
         id: id ?? this.id,
         isSkip: isSkip ?? this.isSkip,
@@ -31,6 +35,6 @@ class Section extends Equatable {
 
   @override
   List<Object?> get props {
-    return [id, isSkip, isTarget, sectionName, ratio];
+    return [id, isSkip, isTarget, sectionName, ratio, ratioSumFromThis];
   }
 }
