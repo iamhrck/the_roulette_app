@@ -55,8 +55,14 @@ class _EntryScreenContents extends StatelessWidget {
                   onPressed: () {
                     final state = BlocProvider.of<EntryBloc>(context).state;
                     if (state.isValid()) {
+                      state.sections.fold(0, (previous, section) {
+                        section.ratioSumFromThis =
+                            previous + int.parse(section.ratio);
+                        return section.ratioSumFromThis;
+                      });
+
                       Navigator.pushNamed(context, AppRouter.roulette,
-                          arguments: state.sections.toPieChartSection());
+                          arguments: state.sections);
                     } else {
                       // TODO ダイアログによるアラート表示
                     }
