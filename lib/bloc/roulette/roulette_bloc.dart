@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:the_roulette_app/bloc/entry/entry_state.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_event.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_state.dart';
 import 'package:the_roulette_app/resource/model/section.dart';

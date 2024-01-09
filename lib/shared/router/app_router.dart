@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:the_roulette_app/resource/model/section.dart';
 import 'package:the_roulette_app/ui/screen/entry/entry_screen.dart';

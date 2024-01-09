@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:the_roulette_app/resource/model/section.dart';
 import 'package:the_roulette_app/shared/app_event.dart';
 
