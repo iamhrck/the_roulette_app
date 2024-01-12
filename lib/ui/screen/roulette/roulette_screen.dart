@@ -48,13 +48,29 @@ class _RouletteScreenLeadText extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RouletteBloc, RouletteState>(builder: (context, state) {
       if (state.result.isEmpty && state.animation == RouletteAnimation.stop) {
-        return Text(Strings.rouletteLeadMessage, style: AppTextStyle.headline3);
+        return Column(
+          children: [
+            Text(Strings.rouletteLeadMessage, style: AppTextStyle.headline3),
+            const Text(Strings.space, style: AppTextStyle.bodyText),
+          ],
+        );
       } else if (state.animation == RouletteAnimation.stop) {
-        return Text(state.result,
-            style:
-                AppTextStyle.headline3.copyWith(color: state.getWinnerColor()));
+        return Column(
+          children: [
+            Text(state.result,
+                style: AppTextStyle.headline3
+                    .copyWith(color: state.getWinnerColor())),
+            const Text(Strings.rouletteRestartMessage,
+                style: AppTextStyle.bodyText)
+          ],
+        );
       } else {
-        return Text(Strings.space, style: AppTextStyle.headline3);
+        return Column(
+          children: [
+            Text(Strings.space, style: AppTextStyle.headline3),
+            const Text(Strings.space, style: AppTextStyle.bodyText),
+          ],
+        );
       }
     });
   }
@@ -121,8 +137,7 @@ class _Roulette extends HookWidget {
                 return Stack(alignment: Alignment.topCenter, children: [
                   Transform.rotate(
                     angle: -(controller.value * 2 * 3.14),
-                    child: _buildRoulette(
-                        state.sections.toPieChartSection(), size),
+                    child: _buildRoulette(state.sections, size),
                   ),
                   SvgPicture.asset(Assets.rouletteArrow, width: 30, height: 54)
                 ]);
@@ -134,10 +149,11 @@ class _Roulette extends HookWidget {
     );
   }
 
-  Widget _buildRoulette(List<PieChartSectionData> data, Size size) {
-    // 端末サイズのようなUIに限った話はstateで管理するPieChartSectionDataには含めたくない
-    // stateから取得したPieChartSectionDataをmapしてradiusだけ加工してWidgetに適用する
-    List<PieChartSectionData> chartData = data.map((pie) {
+  Widget _buildRoulette(List<Section> sections, Size size) {
+    // 端末サイズのようなUIに限った話はstateで管理しない
+    // stateから生成するPieChartSectionDataをmapしてradiusだけ加工してWidgetに適用する
+    List<PieChartSectionData> chartData =
+        sections.toPieChartSection().map((pie) {
       return pie.copyWith(radius: size.width / 2.5);
     }).toList();
 

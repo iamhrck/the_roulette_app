@@ -43,14 +43,14 @@ class _EntryScreenContents extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AppButton(
-                  text: '追加',
+                  text: Strings.addEntry,
                   onPressed: () {
                     context.read<EntryBloc>().add(AddSectionEvent());
                   },
                 ),
                 const SizedBox(width: 24),
                 AppButton(
-                  text: 'スタート',
+                  text: Strings.rouletteStart,
                   buttonColor: AppColors.deepGreen,
                   onPressed: () {
                     final state = BlocProvider.of<EntryBloc>(context).state;
