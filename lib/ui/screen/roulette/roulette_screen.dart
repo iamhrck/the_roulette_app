@@ -3,16 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:the_roulette_app/bloc/entry/entry_state.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_bloc.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_event.dart';
 import 'package:the_roulette_app/bloc/roulette/roulette_state.dart';
+import 'package:the_roulette_app/resource/model/section.dart';
 import 'package:the_roulette_app/shared/constants/assets.dart';
 import 'package:the_roulette_app/ui/components/app_bar.dart';
 import 'package:the_roulette_app/shared/constants/app_text_style.dart';
 import 'package:the_roulette_app/shared/constants/strings.dart';
 
 class RouletteScreen extends StatelessWidget {
-  const RouletteScreen({super.key});
+  //final List<PieChartSectionData> sections;
+  final List<Section> sections;
+
+  const RouletteScreen({super.key, required this.sections});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,8 @@ class RouletteScreen extends StatelessWidget {
         appBar: const CustomAppBar(title: Strings.appTitle),
         body: BlocProvider(
             lazy: false,
-            create: (context) => RouletteBloc()..add(GetPieDataEvent()),
+            create: (context) =>
+                RouletteBloc()..add(GetPieDataEvent(sections: sections)),
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: const SingleChildScrollView(
@@ -42,13 +48,29 @@ class _RouletteScreenLeadText extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RouletteBloc, RouletteState>(builder: (context, state) {
       if (state.result.isEmpty && state.animation == RouletteAnimation.stop) {
-        return Text(Strings.rouletteLeadMessage, style: AppTextStyle.headline3);
+        return Column(
+          children: [
+            Text(Strings.rouletteLeadMessage, style: AppTextStyle.headline3),
+            const Text(Strings.space, style: AppTextStyle.bodyText),
+          ],
+        );
       } else if (state.animation == RouletteAnimation.stop) {
-        return Text(state.result,
-            style:
-                AppTextStyle.headline3.copyWith(color: state.getWinnerColor()));
+        return Column(
+          children: [
+            Text(state.result,
+                style: AppTextStyle.headline3
+                    .copyWith(color: state.getWinnerColor())),
+            const Text(Strings.rouletteRestartMessage,
+                style: AppTextStyle.bodyText)
+          ],
+        );
       } else {
-        return Text(Strings.space, style: AppTextStyle.headline3);
+        return Column(
+          children: [
+            Text(Strings.space, style: AppTextStyle.headline3),
+            const Text(Strings.space, style: AppTextStyle.bodyText),
+          ],
+        );
       }
     });
   }
@@ -102,7 +124,7 @@ class _Roulette extends HookWidget {
     final Size size = MediaQuery.of(context).size;
 
     return BlocBuilder<RouletteBloc, RouletteState>(
-      buildWhen: (p, c) => p.pieDataList.length != c.pieDataList.length,
+      buildWhen: (p, c) => p.sections.length != c.sections.length,
       builder: (context, state) {
         return GestureDetector(
           onTap: switchAnimation,
@@ -115,7 +137,7 @@ class _Roulette extends HookWidget {
                 return Stack(alignment: Alignment.topCenter, children: [
                   Transform.rotate(
                     angle: -(controller.value * 2 * 3.14),
-                    child: _buildRoulette(state.pieDataList, size),
+                    child: _buildRoulette(state.sections, size),
                   ),
                   SvgPicture.asset(Assets.rouletteArrow, width: 30, height: 54)
                 ]);
@@ -127,10 +149,11 @@ class _Roulette extends HookWidget {
     );
   }
 
-  Widget _buildRoulette(List<PieChartSectionData> data, Size size) {
-    // 端末サイズのようなUIに限った話はstateで管理するPieChartSectionDataには含めたくない
-    // stateから取得したPieChartSectionDataをmapしてradiusだけ加工してWidgetに適用する
-    List<PieChartSectionData> chartData = data.map((pie) {
+  Widget _buildRoulette(List<Section> sections, Size size) {
+    // 端末サイズのようなUIに限った話はstateで管理しない
+    // stateから生成するPieChartSectionDataをmapしてradiusだけ加工してWidgetに適用する
+    List<PieChartSectionData> chartData =
+        sections.toPieChartSection().map((pie) {
       return pie.copyWith(radius: size.width / 2.5);
     }).toList();
 
@@ -150,7 +173,7 @@ class _RouletteGuideArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RouletteBloc, RouletteState>(
-      buildWhen: (p, c) => p.pieDataList.length != c.pieDataList.length,
+      buildWhen: (p, c) => p.sections.length != c.sections.length,
       builder: (context, state) {
         return Wrap(
             direction: Axis.horizontal, children: _buildRouletteGuide(state));
@@ -159,7 +182,7 @@ class _RouletteGuideArea extends StatelessWidget {
   }
 
   List<Widget> _buildRouletteGuide(RouletteState state) {
-    return state.pieDataList.map((element) {
+    return state.sections.toPieChartSection().map((element) {
       return Container(
         margin: const EdgeInsets.all(8),
         child: Row(
