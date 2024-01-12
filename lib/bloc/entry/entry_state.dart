@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:the_roulette_app/resource/model/section.dart';
+import 'package:the_roulette_app/shared/constants/app_colors.dart';
 import 'package:the_roulette_app/shared/constants/app_text_style.dart';
 
 class EntryState extends Equatable {
@@ -56,7 +57,7 @@ extension SectionListExt on List<Section> {
           radius: 100,
           color: colors.removeAt(0),
           title: section.sectionName,
-          titleStyle: AppTextStyle.headline4);
+          titleStyle: AppTextStyle.headline4.copyWith(color: AppColors.white));
     }).toList();
   }
 }
