@@ -4,6 +4,7 @@ import 'package:the_roulette_app/ui/components/app_bar.dart';
 import 'package:the_roulette_app/shared/constants/strings.dart';
 import 'package:the_roulette_app/shared/router/app_router.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:the_roulette_app/ui/screen/entry/entry_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       onGenerateRoute: AppRouter.generateRoute,
-      home: const MyHomePage(),
+      home: const EntryScreen(),
     );
   }
 
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       onGenerateRoute: AppRouter.generateRoute,
-      home: const MyHomePage(),
+      home: const EntryScreen(),
     );
   }
 }
