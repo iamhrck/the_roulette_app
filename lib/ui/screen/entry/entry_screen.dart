@@ -4,6 +4,7 @@ import 'package:the_roulette_app/bloc/entry/entry_bloc.dart';
 import 'package:the_roulette_app/bloc/entry/entry_event.dart';
 import 'package:the_roulette_app/bloc/entry/entry_state.dart';
 import 'package:the_roulette_app/shared/constants/app_colors.dart';
+import 'package:the_roulette_app/shared/constants/app_text_style.dart';
 import 'package:the_roulette_app/shared/constants/strings.dart';
 import 'package:the_roulette_app/shared/router/app_router.dart';
 import 'package:the_roulette_app/ui/components/app_bar.dart';
@@ -37,6 +38,11 @@ class _EntryScreenContents extends StatelessWidget {
         margin: const EdgeInsets.all(20),
         child: Column(
           children: [
+            const Text(
+              Strings.rouletteEntryMessage,
+              style: AppTextStyle.bodyText,
+            ),
+            const SizedBox(height: 24),
             const _EntryInputList(),
             const SizedBox(height: 24),
             Row(
