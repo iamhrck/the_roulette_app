@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -86,6 +87,14 @@ class _Roulette extends HookWidget {
       duration: const Duration(seconds: 4),
     );
 
+    final audioPlayer = AudioPlayer();
+
+    useEffect(() {
+      return () {
+        audioPlayer.dispose();
+      };
+    }, const []);
+
     void switchAnimation() {
       RouletteAnimation animation =
           BlocProvider.of<RouletteBloc>(context).state.animation;
@@ -94,6 +103,8 @@ class _Roulette extends HookWidget {
         case RouletteAnimation.stop:
           context.read<RouletteBloc>().add(SwitchAnimationEvent());
           controller.repeat();
+          audioPlayer.play(AssetSource('drum_roll_start.m4a'));
+          audioPlayer.setReleaseMode(ReleaseMode.loop);
           break;
 
         case RouletteAnimation.inprogress:
@@ -113,6 +124,10 @@ class _Roulette extends HookWidget {
                 .read<RouletteBloc>()
                 .add(JudgeWinnerEvent(endpoint: endpoint));
             context.read<RouletteBloc>().add(SwitchAnimationEvent());
+
+            audioPlayer
+                .play(AssetSource('drum_roll_end.m4a'))
+                .then((_) => audioPlayer.setReleaseMode(ReleaseMode.stop));
           });
           break;
 
