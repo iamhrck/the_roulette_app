@@ -10,22 +10,33 @@ class AppRouter {
   static const String setup = '/setup';
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case roulette:
-        // 引数からデータを取得
-        final List<Section> sections = settings.arguments as List<Section>;
+    return PageRouteBuilder(
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final Animatable<Offset> tween = Tween(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: Curves.easeInOut));
 
-        return MaterialPageRoute(
-          builder: (BuildContext context) => RouletteScreen(sections: sections),
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
         );
+      },
+      pageBuilder: (_, __, ___) {
+        switch (settings.name) {
+          case roulette:
+            // 引数からデータを取得
+            final List<Section> sections = settings.arguments as List<Section>;
 
-      case setup:
-        return MaterialPageRoute(
-          builder: (BuildContext context) => const EntryScreen(),
-        );
+            return RouletteScreen(sections: sections);
 
-      default:
-        return null;
-    }
+          case setup:
+            return const EntryScreen();
+
+          default:
+            return const EntryScreen();
+        }
+      },
+    );
   }
 }
