@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:the_roulette_app/resource/model/section.dart';
 import 'package:the_roulette_app/shared/constants/app_colors.dart';
 import 'package:the_roulette_app/shared/constants/app_text_style.dart';
@@ -38,24 +37,11 @@ class EntryState extends Equatable {
 
 extension SectionListExt on List<Section> {
   List<PieChartSectionData> toPieChartSection() {
-    final List<Color> colors = [
-      Colors.blue.withOpacity(0.85),
-      Colors.red.withOpacity(0.85),
-      Colors.green.withOpacity(0.85),
-      Colors.orange.withOpacity(0.85),
-      Colors.purple.withOpacity(0.85),
-      Colors.pink.withOpacity(0.85),
-      Colors.brown.withOpacity(0.85),
-      Colors.grey.withOpacity(0.85),
-      Colors.lime.withOpacity(0.85),
-      Colors.black.withOpacity(0.85),
-    ];
-
     return map((section) {
       return PieChartSectionData(
           value: double.parse(section.ratio),
           radius: 100,
-          color: colors.removeAt(0),
+          color: section.color.withOpacity(0.85),
           title: section.sectionName,
           titleStyle: AppTextStyle.headline4.copyWith(color: AppColors.white));
     }).toList();

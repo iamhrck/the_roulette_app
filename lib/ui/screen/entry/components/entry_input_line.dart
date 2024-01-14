@@ -24,6 +24,15 @@ class EntryInutLine extends HookWidget {
 
     return Row(
       children: [
+        Container(
+          margin: const EdgeInsets.only(right: 8),
+          width: 20,
+          height: 20,
+          decoration: BoxDecoration(
+            color: section.color.withOpacity(0.85),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
         Expanded(
           flex: 4,
           child: TextField(
