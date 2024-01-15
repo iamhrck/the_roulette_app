@@ -48,30 +48,41 @@ class _RouletteScreenLeadText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RouletteBloc, RouletteState>(builder: (context, state) {
-      if (state.result.isEmpty && state.animation == RouletteAnimation.stop) {
-        return Column(
-          children: [
-            Text(Strings.rouletteLeadMessage, style: AppTextStyle.headline3),
-            const Text(Strings.space, style: AppTextStyle.bodyText),
-          ],
-        );
-      } else if (state.animation == RouletteAnimation.stop) {
-        return Column(
-          children: [
-            Text(state.result,
-                style: AppTextStyle.headline3
-                    .copyWith(color: state.getWinnerColor())),
-            const Text(Strings.rouletteRestartMessage,
-                style: AppTextStyle.bodyText)
-          ],
-        );
-      } else {
-        return Column(
-          children: [
-            Text(Strings.space, style: AppTextStyle.headline3),
-            const Text(Strings.space, style: AppTextStyle.bodyText),
-          ],
-        );
+      switch (state.animation) {
+        case RouletteAnimation.stop:
+          return state.result.isEmpty
+              ? Column(
+                  children: [
+                    Text(Strings.rouletteLeadMessage,
+                        style: AppTextStyle.headline3),
+                    const Text(Strings.space, style: AppTextStyle.bodyText),
+                  ],
+                )
+              : Column(
+                  children: [
+                    Text(
+                      state.result,
+                      style: AppTextStyle.headline3
+                          .copyWith(color: state.getWinnerColor()),
+                    ),
+                    const Text(Strings.rouletteRestartMessage,
+                        style: AppTextStyle.bodyText)
+                  ],
+                );
+        case RouletteAnimation.inprogress:
+          return Column(
+            children: [
+              Text(Strings.rouletteStopMessage, style: AppTextStyle.headline3),
+              const Text(Strings.space, style: AppTextStyle.bodyText),
+            ],
+          );
+        default:
+          return Column(
+            children: [
+              Text(Strings.space, style: AppTextStyle.headline3),
+              const Text(Strings.space, style: AppTextStyle.bodyText),
+            ],
+          );
       }
     });
   }
