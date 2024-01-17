@@ -94,8 +94,8 @@ class _Roulette extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = useAnimationController(
-      upperBound: 10,
-      duration: const Duration(seconds: 4),
+      upperBound: 100,
+      duration: const Duration(seconds: 50),
     );
 
     final audioPlayer = AudioPlayer();
