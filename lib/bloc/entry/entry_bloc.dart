@@ -26,15 +26,19 @@ class EntryBloc extends Bloc<EntryEvent, EntryState> {
   void _addSection(AddSectionEvent event, Emitter<EntryState> emit) {
     final state = this.state;
 
-    final int id = state.sections[state.sections.length - 1].id + 1;
+    if (state.sections.isEmpty) {
+      emit(state.copyWith(sections: [Section(id: 0)]));
+    } else {
+      final int id = state.sections[state.sections.length - 1].id + 1;
 
-    final Color color = colors.where((element) {
-          return !state.sections.map((e) => e.color).contains(element);
-        }).firstOrNull ??
-        Colors.white;
+      final Color color = colors.where((element) {
+            return !state.sections.map((e) => e.color).contains(element);
+          }).firstOrNull ??
+          Colors.white;
 
-    final sections = [...state.sections, Section(id: id, color: color)];
-    emit(state.copyWith(sections: sections));
+      final sections = [...state.sections, Section(id: id, color: color)];
+      emit(state.copyWith(sections: sections));
+    }
   }
 
   void _removeSection(RemoveSectionEvent event, Emitter<EntryState> emit) {
