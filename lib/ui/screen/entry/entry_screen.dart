@@ -7,6 +7,7 @@ import 'package:the_roulette_app/shared/constants/app_colors.dart';
 import 'package:the_roulette_app/shared/constants/app_text_style.dart';
 import 'package:the_roulette_app/shared/constants/strings.dart';
 import 'package:the_roulette_app/shared/router/app_router.dart';
+import 'package:the_roulette_app/ui/components/app_alert_dialog.dart';
 import 'package:the_roulette_app/ui/components/app_bar.dart';
 import 'package:the_roulette_app/ui/components/app_button.dart';
 import 'package:the_roulette_app/ui/screen/entry/components/entry_input_line.dart';
@@ -70,7 +71,10 @@ class _EntryScreenContents extends StatelessWidget {
                       Navigator.pushNamed(context, AppRouter.roulette,
                           arguments: state.sections);
                     } else {
-                      // TODO ダイアログによるアラート表示
+                      showDialog(
+                        context: context,
+                        builder: (_) => const AppAlertDialog(),
+                      );
                     }
                   },
                 ),
