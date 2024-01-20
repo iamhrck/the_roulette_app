@@ -8,7 +8,7 @@ class Strings {
   static const String rouletteStopMessage = 'タップしてルーレットを停止';
   static const String rouletteRestartMessage = 'タップしてルーレットを再実施';
   static const String inputErrorDialogTitle = '入力エラー';
-  static const String inputErrorDialogContent = '未入力の入力欄が存在します';
+  static const String inputErrorDialogContent = '未入力もしくは不適切な値が入った入力欄が存在します';
   static const String inputErrorDialogButton = '閉じる';
   static const String rouletteStart = 'スタート';
   static const String addEntry = '追加';

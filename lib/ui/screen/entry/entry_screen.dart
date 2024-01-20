@@ -62,6 +62,7 @@ class _EntryScreenContents extends StatelessWidget {
                   onPressed: () {
                     final state = BlocProvider.of<EntryBloc>(context).state;
                     if (state.isValid()) {
+                      // TODO: ロジック移植
                       state.sections.fold(0, (previous, section) {
                         section.ratioSumFromThis =
                             previous + int.parse(section.ratio);

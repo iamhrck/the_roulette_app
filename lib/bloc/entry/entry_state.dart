@@ -19,15 +19,14 @@ class EntryState extends Equatable {
   }
 
   bool isValid() {
-    var inValids = sections
-        .map((section) {
-          if (!RegExp(r'^\d+$').hasMatch(section.ratio)) {
-            section.ratio = '';
-          }
-          return section;
-        })
-        .where((section) => section.sectionName.isEmpty)
-        .length;
+    var inValids = sections.map((section) {
+      if (!RegExp(r'^\d+$').hasMatch(section.ratio)) {
+        section.ratio = '';
+      }
+      return section;
+    }).where((section) {
+      return section.sectionName.isEmpty || section.ratio.isEmpty;
+    }).length;
     return sections.isNotEmpty && inValids == 0;
   }
 
