@@ -50,7 +50,7 @@ class _RouletteScreenLeadText extends StatelessWidget {
     return BlocBuilder<RouletteBloc, RouletteState>(builder: (context, state) {
       switch (state.animation) {
         case RouletteAnimation.stop:
-          return state.result.isEmpty
+          return state.winner == null
               ? Column(
                   children: [
                     Text(Strings.rouletteLeadMessage,
@@ -61,9 +61,9 @@ class _RouletteScreenLeadText extends StatelessWidget {
               : Column(
                   children: [
                     Text(
-                      state.result,
+                      state.winner!.sectionName,
                       style: AppTextStyle.headline3
-                          .copyWith(color: state.getWinnerColor()),
+                          .copyWith(color: state.winner!.color),
                     ),
                     const Text(Strings.rouletteRestartMessage,
                         style: AppTextStyle.bodyText)

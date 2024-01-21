@@ -21,11 +21,12 @@ class RouletteBloc extends Bloc<RouletteEvent, RouletteState> {
       return previous + int.parse(section.ratio);
     });
     double range = 1 / sum;
+    double actualEndpoint = (event.endpoint % 1);
     Section winner = state.sections.firstWhere((section) {
-      return (event.endpoint % 1) <= section.ratioSumFromThis * range;
+      return actualEndpoint <= section.ratioSumFromThis * range;
     });
 
-    emit(state.copyWith(result: winner.sectionName));
+    emit(state.copyWith(winner: winner));
   }
 
   void _getPieData(GetPieDataEvent event, Emitter<RouletteState> emit) {
